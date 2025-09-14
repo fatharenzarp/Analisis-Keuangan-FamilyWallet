@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografis Analisis Keuangan Keluarga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .chart-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            width: 100%;
+            max-width: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 384px;
+            }
+        }
+        .stat-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #E2E8F0;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:px-6 md:py-12">
+
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold" style="color: #F45B69;">Analisis Arus Kas Keluarga</h1>
+            <p class="mt-3 text-lg text-slate-600 max-w-3xl mx-auto">Sebuah tinjauan visual terhadap data keuangan untuk membantu evaluasi bersama. Mari kita lihat ke mana uang pergi dan dari mana datangnya.</p>
+        </header>
+        
+        <section id="ringkasan" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Gambaran Umum Keuangan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="stat-card">
+                    <h3 class="text-lg font-semibold text-slate-500">Total Uang Masuk</h3>
+                    <p class="text-4xl font-bold mt-2" style="color: #00A6A6;">Rp 8.727.462</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-lg font-semibold text-slate-500">Total Uang Keluar</h3>
+                    <p class="text-4xl font-bold mt-2" style="color: #F29559;">Rp 8.617.962</p>
+                </div>
+                <div class="stat-card border-2" style="border-color: #F45B69;">
+                    <h3 class="text-lg font-semibold text-slate-500">Sisa Saldo Akhir</h3>
+                    <p class="text-4xl font-bold mt-2" style="color: #F45B69;">Rp 109.500</p>
+                </div>
+            </div>
+            <p class="text-center mt-6 text-slate-600 max-w-2xl mx-auto">Dengan sisa saldo yang sangat tipis, analisis ini menjadi penting untuk perencanaan ke depan.</p>
+        </section>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+            
+            <section id="pemasukan" class="stat-card flex flex-col">
+                <h2 class="text-2xl font-bold text-center mb-2">Siapa Kontributor Utama?</h2>
+                <p class="text-center text-slate-600 mb-6">Diagram ini menunjukkan komposisi total uang yang masuk. Terlihat jelas bahwa sebagian besar pemasukan berasal dari satu sumber utama.</p>
+                <div class="chart-container flex-grow">
+                    <canvas id="pemasukanChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm p-3 rounded-lg" style="background-color: #E0F2F2;">
+                    <span class="font-bold" style="color: #00A6A6;">Poin Kunci:</span> Bapak merupakan sumber pemasukan terbesar dengan kontribusi lebih dari 80% dari total dana yang masuk.
+                </div>
+            </section>
+
+            <section id="pengeluaran" class="stat-card flex flex-col">
+                <h2 class="text-2xl font-bold text-center mb-2">Alokasi Pengeluaran Terbesar</h2>
+                <p class="text-center text-slate-600 mb-6">Grafik ini membandingkan total pengeluaran setiap anggota, di luar kebutuhan wajib seperti biaya sekolah atau kuliah, untuk melihat pola belanja harian.</p>
+                <div class="chart-container flex-grow">
+                    <canvas id="pengeluaranChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm p-3 rounded-lg" style="background-color: #FDE8D8;">
+                    <span class="font-bold" style="color: #F29559;">Poin Kunci:</span> Bisma tercatat memiliki alokasi pengeluaran non-wajib tertinggi, diikuti oleh Renza. Ini adalah area utama untuk diskusi evaluasi.
+                </div>
+            </section>
+
+            <section id="komposisi" class="stat-card flex flex-col lg:col-span-2">
+                <h2 class="text-2xl font-bold text-center mb-2">Peta Pengeluaran Total</h2>
+                <p class="text-center text-slate-600 mb-6 max-w-3xl mx-auto">Berikut adalah gambaran persentase dari total seluruh uang yang keluar per anggota, termasuk biaya wajib. Satu pos pengeluaran besar terlihat sangat mendominasi.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="totalPengeluaranChart"></canvas>
+                    </div>
+                    <div class="text-slate-700 space-y-4">
+                        <div class="p-4 rounded-lg" style="background-color: #FEF3C7;">
+                            <h4 class="font-bold" style="color: #D97706;">Pengeluaran Terbesar: Renza</h4>
+                            <p>Sebagian besar pengeluaran Renza adalah untuk biaya kuliah, yang merupakan pengeluaran wajib dan signifikan dalam periode ini.</p>
+                        </div>
+                         <div class="p-4 rounded-lg" style="background-color: #FEE2E2;">
+                            <h4 class="font-bold" style="color: #B91C1C;">Distribusi Lainnya</h4>
+                            <p>Pengeluaran Bisma dan Bapak secara persentase jauh lebih kecil dari total keseluruhan, menunjukkan bahwa mayoritas arus kas keluar digunakan untuk satu tujuan utama.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="kesimpulan" class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Kesimpulan & Langkah Selanjutnya</h2>
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="flex items-start stat-card">
+                    <div class="text-3xl mr-4" style="color: #F45B69;">1</div>
+                    <div>
+                        <h3 class="font-bold text-xl">Ketergantungan Pemasukan</h3>
+                        <p class="text-slate-600 mt-1">Struktur keuangan saat ini sangat bergantung pada pemasukan dari Bapak. Perlu didiskusikan strategi untuk diversifikasi sumber pendapatan di masa depan jika memungkinkan.</p>
+                    </div>
+                </div>
+                <div class="flex items-start stat-card">
+                     <div class="text-3xl mr-4" style="color: #F45B69;">2</div>
+                    <div>
+                        <h3 class="font-bold text-xl">Evaluasi Pengeluaran Non-Wajib</h3>
+                        <p class="text-slate-600 mt-1">Fokus diskusi bisa diarahkan pada pengeluaran Bisma dan Renza untuk mencari area potensial penghematan tanpa mengurangi kualitas hidup, guna meningkatkan sisa saldo bulanan.</p>
+                    </div>
+                </div>
+                <div class="flex items-start stat-card">
+                     <div class="text-3xl mr-4" style="color: #F45B69;">3</div>
+                    <div>
+                        <h3 class="font-bold text-xl">Membangun Dana Cadangan</h3>
+                        <p class="text-slate-600 mt-1">Dengan sisa saldo yang tipis, prioritas selanjutnya adalah membangun dana darurat. Sedikit penghematan dari pos non-wajib dapat dialokasikan untuk tujuan ini secara konsisten.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const formatRupiah = (angka) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        };
+
+        const tooltipTitleCallback = function(tooltipItems) {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback,
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += formatRupiah(context.parsed);
+                            }
+                            return label;
+                        }
+                    },
+                    padding: 10,
+                    bodyFont: {
+                        size: 14
+                    },
+                    titleFont: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                }
+            }
+        };
+        
+        const palette = {
+            primary: '#00A6A6',
+            secondary: '#E8C547',
+            tertiary: '#F29559',
+            accent: '#F45B69',
+            neutral: '#75B5B5'
+        };
+
+        const pemasukanCtx = document.getElementById('pemasukanChart').getContext('2d');
+        new Chart(pemasukanCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bapak', 'Renza', 'Bisma'],
+                datasets: [{
+                    label: 'Total Pemasukan',
+                    data: [7010000, 1190000, 519000],
+                    backgroundColor: [palette.primary, palette.secondary, palette.tertiary],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...tooltipConfig.plugins,
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                             padding: 20
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        const pengeluaranCtx = document.getElementById('pengeluaranChart').getContext('2d');
+        new Chart(pengeluaranCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Bisma', 'Renza', 'Bapak'],
+                datasets: [{
+                    label: 'Pengeluaran Non-Wajib',
+                    data: [2779000, 2091270, 898000],
+                    backgroundColor: [palette.accent, palette.tertiary, palette.neutral],
+                    borderRadius: 5,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                 ...tooltipConfig,
+                plugins: {
+                     ...tooltipConfig.plugins,
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: (value) => value / 1000000 + ' Jt'
+                        }
+                    }
+                }
+            }
+        });
+
+        const totalPengeluaranCtx = document.getElementById('totalPengeluaranChart').getContext('2d');
+        new Chart(totalPengeluaranCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Renza', 'Bisma', 'Bapak'],
+                datasets: [{
+                    label: 'Total Pengeluaran',
+                    data: [4939270, 2779000, 898000],
+                    backgroundColor: [palette.secondary, palette.accent, palette.primary],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...tooltipConfig.plugins,
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                         callbacks: {
+                            title: tooltipTitleCallback,
+                            label: function(context) {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const value = context.parsed;
+                                const percentage = ((value / total) * 100).toFixed(1) + '%';
+                                return `${context.label}: ${formatRupiah(value)} (${percentage})`;
+                            }
+                        },
+                        padding: 10,
+                        bodyFont: {
+                            size: 14
+                        },
+                        titleFont: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
